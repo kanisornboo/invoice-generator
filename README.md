@@ -2,6 +2,9 @@
 
 A modern, professional invoice generator built with Next.js. Create, preview, and download invoices as PDFs with automatic currency detection based on your location.
 
+![Invoice Generator Demo](./public/screenshots/demo.png)
+<!-- Screenshot: Main application view -->
+
 ## Features
 
 - **Invoice Creation** - Add line items with description, quantity, and rate
@@ -114,6 +117,9 @@ A modern, professional invoice generator built with Next.js. Create, preview, an
 
 The AI feature helps you write professional invoice descriptions:
 
+![AI Enhancement Feature](./public/screenshots/ai-enhance.png)
+<!-- Screenshot: AI Enhance button in action -->
+
 **Example 1:**
 - Type: `web design`
 - Click "✨ Enhance"
@@ -164,6 +170,20 @@ invoice-generator/
     ├── calculations.ts     # Tax and total calculations
     └── formatter.ts        # Currency and date formatting
 ```
+
+## Screenshots
+
+### Invoice Form
+![Invoice Form](./public/screenshots/invoice-form.png)
+<!-- Screenshot: Invoice creation form with line items -->
+
+### Invoice Preview
+![Invoice Preview](./public/screenshots/invoice-preview.png)
+<!-- Screenshot: PDF preview of generated invoice -->
+
+### AI-Powered Description Enhancement
+![AI Enhancement](./public/screenshots/ai-feature.png)
+<!-- Screenshot: Before and after AI enhancement -->
 
 ## Currency Support
 
