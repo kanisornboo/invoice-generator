@@ -15,6 +15,7 @@ export type InvoiceContextType = {
   addItem: () => void;
   removeItem: (id: number) => void;
   updateItem: (index: number, key: keyof InvoiceItem, value: any) => void;
+  enhanceDescription: (index: number, description: string) => Promise<void>;
   handleDownloadPDF: () => void;
   pdfUrl: string | null;
 };
@@ -114,6 +115,36 @@ export const InvoiceProvider = ({
 
     // Convert string to number
     return Number(value);
+  };
+
+  const enhanceDescription = async (index: number, description: string) => {
+    try {
+      const response = await fetch("/api/ai/enhance-description", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          description,
+          context: {
+            otherItems: invoice.items
+              .filter((_, i) => i !== index)
+              .map((item) => item.description),
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to enhance description");
+      }
+
+      const data = await response.json();
+      updateItem(index, "description", data.enhancedDescription);
+    } catch (error) {
+      console.error("Failed to enhance description:", error);
+      throw error;
+    }
   };
 
   const handleDownloadPDF = () => {
@@ -354,6 +385,7 @@ export const InvoiceProvider = ({
         addItem,
         removeItem,
         updateItem,
+        enhanceDescription,
         handleDownloadPDF,
         pdfUrl,
       }}

@@ -1,10 +1,11 @@
-import { Trash, X } from "lucide-react";
+import { Trash, Sparkles } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import type { InvoiceItem as InvoiceItemType } from "../types/invoice";
 import { useInvoice } from "@/context/invoice-context";
 import { formatCurrency, getCurrencySymbol } from "@/utils/formatter";
+import { useState } from "react";
 
 interface InvoiceItemProps {
   item: InvoiceItemType;
@@ -17,8 +18,9 @@ export default function InvoiceItem({
   index,
   canRemove,
 }: InvoiceItemProps) {
-  const { removeItem, updateItem, invoice } = useInvoice();
+  const { removeItem, updateItem, invoice, enhanceDescription } = useInvoice();
   const currencySymbol = getCurrencySymbol(invoice.currency);
+  const [isEnhancing, setIsEnhancing] = useState(false);
 
   const handleQuantityChange = (value: string) => {
     if (value === "") {
@@ -54,16 +56,50 @@ export default function InvoiceItem({
     }
   };
 
+  const handleEnhanceDescription = async () => {
+    if (!item.description || item.description.trim() === "") {
+      return;
+    }
+
+    setIsEnhancing(true);
+    try {
+      await enhanceDescription(index, item.description);
+    } catch (error) {
+      console.error("Enhancement failed:", error);
+    } finally {
+      setIsEnhancing(false);
+    }
+  };
+
   return (
     <div className="grid grid-cols-12 gap-4 p-4 border border-gray-200 rounded-md">
       <div className="col-span-5">
-        <Label> Description </Label>
-        <Input
-          type="text"
-          placeholder="Description"
-          onChange={(e) => updateItem(index, "description", e.target.value)}
-        />
+        <div className="flex items-center justify-between ">
+          <Label> Description </Label>
+        </div>
+        <div className="flex">
+          <Input
+            type="text"
+            placeholder="e.g., web design"
+            value={item.description}
+            onChange={(e) => updateItem(index, "description", e.target.value)}
+          />
+          <Button
+            variant="link"
+            size="sm"
+            onClick={handleEnhanceDescription}
+            disabled={isEnhancing || !item.description?.trim()}
+            className="cursor-pointer"
+          >
+            {isEnhancing ? (
+              <Sparkles className="animate-bounce text-blue-900" />
+            ) : (
+              <Sparkles />
+            )}
+          </Button>
+        </div>
       </div>
+
       <div className="col-span-2">
         <Label> Quantity </Label>
         <Input
