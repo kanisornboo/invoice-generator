@@ -4,6 +4,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import type { InvoiceItem as InvoiceItemType } from "../types/invoice";
 import { useInvoice } from "@/context/invoice-context";
+import { formatCurrency, getCurrencySymbol } from "@/utils/formatter";
 
 interface InvoiceItemProps {
   item: InvoiceItemType;
@@ -16,7 +17,8 @@ export default function InvoiceItem({
   index,
   canRemove,
 }: InvoiceItemProps) {
-  const { removeItem, updateItem } = useInvoice();
+  const { removeItem, updateItem, invoice } = useInvoice();
+  const currencySymbol = getCurrencySymbol(invoice.currency);
 
   const handleQuantityChange = (value: string) => {
     if (value === "") {
@@ -74,7 +76,7 @@ export default function InvoiceItem({
         />
       </div>
       <div className="col-span-2">
-        <Label> Rate ($)</Label>
+        <Label> Rate ({currencySymbol})</Label>
         <Input
           type="number"
           min={0}
@@ -89,7 +91,11 @@ export default function InvoiceItem({
       <div className="col-span-2">
         <Label> Amount </Label>
         <div className="h-10 px-3 py-2 bg-gray-50 rounded-md flex items-center ">
-          ${typeof item.amount === "number" ? item.amount.toFixed(2) : "0.00"}
+          {formatCurrency(
+            typeof item.amount === "number" ? item.amount : 0,
+            invoice.currency,
+            invoice.locale,
+          )}
         </div>
       </div>
       <div className="col-span-1 flex items-end">

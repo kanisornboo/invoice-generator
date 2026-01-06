@@ -5,8 +5,10 @@ export const initialInvoice: InvoiceData = {
   date: new Date().toISOString(),
   fromName: "",
   fromEmail: "",
+  fromAddress: "",
   toName: "",
   toEmail: "",
+  toAddress: "",
   items: [
     {
       id: "1",
@@ -17,7 +19,10 @@ export const initialInvoice: InvoiceData = {
     },
   ],
   taxRate: 0,
-  subTotal: 0,
+  subtotal: 0,
   taxAmount: 0,
   total: 0,
+  currency: "USD",
+  locale: "en-US",
+  notes: "",
 };

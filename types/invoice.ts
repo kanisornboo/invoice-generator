@@ -11,11 +11,16 @@ export interface InvoiceData {
   date: string;
   fromName: string;
   fromEmail: string;
+  fromAddress?: string;
   toName: string;
   toEmail: string;
+  toAddress?: string;
   items: InvoiceItem[];
   taxRate: number | string;
   subtotal: number;
   taxAmount: number;
   total: number;
+  currency: string;
+  locale: string;
+  notes?: string;
 }
